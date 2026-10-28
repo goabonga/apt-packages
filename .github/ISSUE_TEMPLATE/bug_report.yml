@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Chris <goabonga@pm.me>
+
+name: Bug report
+description: A package fails to build, install, or misbehaves once installed
+labels: ["bug"]
+body:
+  - type: input
+    id: package
+    attributes:
+      label: Package
+      description: The package name, exactly as it appears under packages/
+      placeholder: example-pkg
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "Output of: dpkg-query -W -f='${Version}\\n' <package>"
+      placeholder: 0.2.1-1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Where it fails
+      options:
+        - Building (debuild, or a build server such as Launchpad)
+        - Installing (apt install / dpkg -i)
+        - After installation, at runtime
+        - Removing or upgrading
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the full error output. Paste it as text, not a screenshot.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: "Distribution, series and architecture: lsb_release -a; dpkg --print-architecture; uname -a"
+      render: shell
+    validations:
+      required: true
