@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  SPDX-License-Identifier: MIT
+  Copyright (c) 2026 Chris <goabonga@pm.me>
+
+  apt-packages logo.
+
+  The same idea as aur-packages: the mountain is not drawn, it is the
+  silhouette that three stacked packages leave behind. The apex stays dark
+  because the top of the stack is always the release that has not been cut
+  yet.
+
+  The palette is Debian's red (#D70A53) lightening as the stack goes down,
+  so the oldest layer reads as the settled one.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <clipPath id="peak">
+      <path d="M128 58 L204 198 L52 198 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Rounded shell, then the dark ground it frames -->
+  <rect x="16" y="16" width="224" height="224" rx="52" fill="#D70A53"/>
+  <rect x="34" y="34" width="188" height="188" rx="40" fill="#1B0A12"/>
+
+  <!-- Three package layers, clipped to the peak -->
+  <g clip-path="url(#peak)">
+    <rect x="44" y="110" width="168" height="24" rx="7" fill="#D70A53"/>
+    <rect x="44" y="142" width="168" height="24" rx="7" fill="#F0668F"/>
+    <rect x="44" y="174" width="168" height="24" rx="7" fill="#F9A8C2"/>
+  </g>
+
+  <!-- The peak itself, outlined over the stack -->
+  <path d="M128 58 L204 198 L52 198 Z" fill="none" stroke="#F0668F"
+        stroke-width="12" stroke-linejoin="round"/>
+</svg>
