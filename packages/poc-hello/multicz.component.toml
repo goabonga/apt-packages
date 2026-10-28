@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Chris <goabonga@pm.me>
+
+# poc-hello packages the `hello` binary of poc-app.
+#
+# No `bump_files`: the topmost stanza of debian/changelog is the version
+# source, and the `debian-changelog` writer below prepends a new stanza on
+# every release, so multicz owns the version line, the Debian changelog, its
+# Markdown copy and the tag.
+#
+# `distribution` is a series Launchpad accepts; an upload is reheadered to
+# the series it is made for. `paths` is left out: it defaults to this whole
+# directory.
+[components.poc-hello]
+changelog = "CHANGELOG.md"
+
+[[components.poc-hello.writers]]
+type = "debian-changelog"
+distribution = "noble"

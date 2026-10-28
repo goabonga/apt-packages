@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Chris <goabonga@pm.me>
+
+# multicz.toml - per-package versioning, changelogs and tags, driven by
+# Conventional Commits. Docs: https://goabonga.github.io/multicz/
+#
+# Each package declares itself in packages/<name>/multicz.component.toml,
+# picked up by the [[component.path]] entry below, so adding a package
+# never touches this file. The invariant every package has to satisfy:
+#
+#     packages/<name>/  ==  the Source: of debian/control
+#                       ==  [components.<name>]
+#                       ==  the commit scope
+#
+# A commit that touches packages/poc-hello/ bumps poc-hello: the files a
+# commit touches decide the package, its type decides the release.
+#
+# A package is a pure Debian source package: its debian/changelog is the
+# source of truth of its version, and multicz prepends a stanza to it on
+# every release (see the `debian-changelog` writer of each component).
+
+[project]
+commit_convention = "conventional"
+tag_format = "{component}-v{version}"
+initial_version = "0.0.0"
+# Persist the last released version per component so
+# `multicz validate --strict` can report drift.
+state_file = ".multicz/state.json"
+
+# Conventional types that move a version. Deliberately narrow: docs,
+# style, test, chore and refactor touch tracked paths constantly without
+# changing what apt installs.
+#
+# `build` is the packaging-specific one: a change to how a package is
+# assembled that ships no new upstream code - a corrected `Depends`, a
+# fixed install path. On Debian that is what a new revision is for.
+[project.bump_rules]
+feat = "minor"
+fix = "patch"
+perf = "patch"
+build = "patch"
+revert = "patch"
+
+[[project.changelog_sections]]
+title = "Added"
+types = ["feat"]
+
+[[project.changelog_sections]]
+title = "Fixed"
+types = ["fix"]
+
+[[project.changelog_sections]]
+title = "Packaging"
+types = ["build"]
+
+[[project.changelog_sections]]
+title = "Performance"
+types = ["perf"]
+
+[[component.path]]
+path = "packages/*"
