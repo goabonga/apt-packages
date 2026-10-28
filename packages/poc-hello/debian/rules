@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+# Launchpad's builders have no network access: scripts/build-source.sh runs
+# `go mod vendor` before assembling the orig tarball, so -mod=vendor is the
+# only mode that can possibly succeed here.
+export CGO_ENABLED=0
+export GOFLAGS=-mod=vendor
+# The builders run with a HOME that does not exist (/sbuild-nonexistent), so
+# Go's default build cache under it cannot be created.
+export GOCACHE=$(CURDIR)/.gocache
+
+# Series whose default Go is older than the 1.22 go.mod asks for (jammy) get
+# it from the golang-1.22-go package, which installs outside the PATH.
+GO := $(shell test -x /usr/lib/go-1.22/bin/go && echo /usr/lib/go-1.22/bin/go || echo go)
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	$(GO) build -trimpath -ldflags='-s -w' -o poc-hello ./cmd/hello
+
+override_dh_auto_install:
+	install -Dm755 poc-hello debian/poc-hello/usr/bin/poc-hello
